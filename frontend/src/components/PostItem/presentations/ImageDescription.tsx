@@ -1,25 +1,33 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Text } from '@chakra-ui/react';
 
-import { PostItem } from '../models/types';
+import { PostItemProps } from '../models/types';
 
-const ImageDescription = ({ data }: PostItem) => {
+const ImageDescription = ({ data }: PostItemProps) => {
+  const { caption, author_name } = data;
+
   const [openedMore, setOpenedMore] = useState(false);
-  const { caption, author } = data;
+  const textRef = useRef<HTMLParagraphElement>(null);
+  const [truncated, setTruncated] = useState(false);
 
-  const like_amount = 0;
-  const authorName = author.full_name;
+  useEffect(() => {
+    if (!textRef.current) return;
+    setTruncated(Boolean(textRef.current?.clientHeight >= 39));
+  }, [caption]);
 
   return (
     <>
-      <Text fontWeight={500} fontSize="small">
-        {like_amount?.toLocaleString() || '0'} LIKES
+      <Text
+        ref={textRef}
+        {...(!openedMore && { noOfLines: 2 })}
+        fontWeight={500}
+        fontSize="small"
+        whiteSpace="pre-wrap"
+      >
+        <strong>{author_name}</strong> {caption}
       </Text>
-      <Text {...(!openedMore && { noOfLines: 2 })} fontWeight={500} fontSize="small">
-        {authorName} - {caption}
-      </Text>
-      {!openedMore && (
+      {!openedMore && truncated && (
         <Text onClick={() => setOpenedMore(true)} as="button" fontSize="small" fontWeight={700} bgColor="transparent">
           more
         </Text>

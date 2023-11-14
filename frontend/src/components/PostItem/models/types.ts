@@ -1,10 +1,15 @@
+import { Comment } from '@/models/types';
+
 export interface PostData {
   id: string;
   image_path: string;
   caption: string;
-  author_id: string;
   created_at: string;
-  author: Author;
+  author_name: string;
+  author_image: string;
+  comment_count: number;
+  like_count: number;
+  like_id?: string;
 }
 
 export interface Author {
@@ -15,11 +20,16 @@ export interface Author {
   created_at: string;
 }
 
-export interface PostItem {
+export interface PostItemProps {
   data: PostData;
 }
 
 export interface ActionButtonsProps {
+  postID: string;
   isLiked?: boolean;
   toggleLike: () => void;
+}
+
+export interface CommentItemProps {
+  data: Comment;
 }

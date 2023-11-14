@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
+import PostDetailWrapper from '@/components/PostDetailWrapper';
+import AuthProvider from '@/context/auth/Provider';
+
 import ChakraAppCache from '../components/ChakraAppCache';
 import { ComponentProps } from '../models/types';
 
@@ -15,7 +18,11 @@ const RootLayout = ({ children }: ComponentProps) => {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ChakraAppCache>{children}</ChakraAppCache>
+        <ChakraAppCache>
+          <AuthProvider>
+            <PostDetailWrapper>{children}</PostDetailWrapper>
+          </AuthProvider>
+        </ChakraAppCache>
       </body>
     </html>
   );

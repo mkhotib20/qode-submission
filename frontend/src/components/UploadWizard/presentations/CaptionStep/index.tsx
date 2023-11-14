@@ -4,12 +4,15 @@ import { Button, Textarea } from '@chakra-ui/react';
 
 import { ComponentStepProps } from '../../models/type';
 
-const CaptionStep = ({ imageState, loading, handleSubmit, setImageState }: ComponentStepProps) => {
+const CaptionStep = ({ imageState, setActiveStep, loading, handleSubmit, setImageState }: ComponentStepProps) => {
   if (!imageState.previewUrl) return null;
 
   return (
     <>
-      <Image src={imageState.previewUrl} alt="Image upload" width={450} height={300} />
+      <Image src={imageState.previewUrl} alt="Image upload" width={450} objectFit="contain" height={300} />
+      <Button marginTop={2} onClick={() => setActiveStep('upload')}>
+        Change Image
+      </Button>
       <Textarea
         isDisabled={loading}
         value={imageState.caption}

@@ -23,7 +23,7 @@ const SimpleModal = ({ children, title, ...restProps }: SimpleModalProps) => {
         </ModalHeader>
         <ModalCloseButton />
 
-        <ModalBody textAlign="center">{children}</ModalBody>
+        <ModalBody textAlign="center"> {restProps.isOpen && children}</ModalBody>
         <ModalFooter></ModalFooter>
       </ModalContent>
     </Modal>

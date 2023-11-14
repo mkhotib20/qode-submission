@@ -1,21 +1,21 @@
 'use client';
 
-import { useCallback } from 'react';
-
 import { Box, Flex, Text } from '@chakra-ui/react';
 
+import PostItem from '@/components/PostItem';
 import Sidebar from '@/components/Sidebar';
 import useIntersect from '@/hooks/useIntersect';
 
-import PostItem from '../../components/PostItem';
 import ImageItemLoading from '../../components/PostItem/loader';
 import useHomeData from './repository/useFetchHomepage';
 
 const Index = () => {
-  const { postData, hasNext, isLoading } = useHomeData();
-  const onIntersect = useCallback(() => {}, []);
+  const { postData, fetchMore, hasNext, isLoading, fetchingMore } = useHomeData();
 
-  const intersectRef = useIntersect(onIntersect);
+  const intersectRef = useIntersect(() => {
+    if (fetchingMore) return;
+    fetchMore();
+  });
 
   return (
     <Flex height="100%">
@@ -26,7 +26,12 @@ const Index = () => {
         {postData.map((photo) => (
           <PostItem data={photo} key={photo.id} />
         ))}
-        {hasNext && !isLoading && <div ref={intersectRef} />}
+
+        {hasNext && !isLoading && (
+          <div ref={intersectRef}>
+            <ImageItemLoading />
+          </div>
+        )}
       </Box>
     </Flex>
   );

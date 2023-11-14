@@ -25,4 +25,4 @@ export class Comment {
   created_at: string;
 }
 
-export const commentRep = () => AppDataSource.getRepository(Comment);
+export const commentRepo = () => AppDataSource.getRepository(Comment);

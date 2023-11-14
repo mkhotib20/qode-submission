@@ -1,9 +1,10 @@
 import { Dispatch, SetStateAction } from 'react';
 
-export type UploadWizardStep = 'upload' | 'caption';
+export type UploadWizardStep = 'upload' | 'caption' | 'status';
 
 export interface UploadData {
   file?: File;
+  error?: string;
   previewUrl?: string;
   caption?: string;
 }

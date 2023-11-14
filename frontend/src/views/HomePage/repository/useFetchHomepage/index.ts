@@ -1,18 +1,47 @@
 'use client';
 
-import useSwr from 'swr';
+import { useCallback, useState } from 'react';
 
+import useSWRInfinite from 'swr/infinite';
+
+import { API_URL } from '@/models/constants';
 import jsonFetcher from '@/utils/jsonFetcher';
 
 import { PostResponse } from '../../models/types';
 
+const getKey = (pageIndex: number, prevPage?: PostResponse) => {
+  if (prevPage && !prevPage.result.length) {
+    return null;
+  }
+
+  return `${API_URL}/post?page=${pageIndex + 1}`;
+};
+
 const useHomeData = () => {
-  const { data, isLoading } = useSwr<PostResponse>('/api/v1/post', jsonFetcher);
+  const [fetchingMore, setFetchingMore] = useState(false);
+
+  // will always revalidate first page to reconsile the sort
+  // In network will always show page 1 refetched before next page
+  const { data, setSize, isLoading } = useSWRInfinite<PostResponse>(getKey, jsonFetcher, {
+    onSuccess: () => {
+      setFetchingMore(false);
+    },
+  });
+
+  const postData = data?.flatMap((item) => item.result) || [];
+  const hasNext = data?.[data?.length - 1]?.nextPage;
+
+  const fetchMore = useCallback(() => {
+    setFetchingMore(true);
+    setSize((prev) => prev + 1);
+  }, [setSize]);
 
   return {
-    postData: data?.result || [],
-    hasNext: Boolean(data?.nextPage),
+    postData,
+    hasNext,
+    fetchMore,
     isLoading,
+    fetchingMore,
   };
 };
 

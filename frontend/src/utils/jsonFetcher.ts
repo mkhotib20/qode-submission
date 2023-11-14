@@ -4,12 +4,16 @@ type JsonFetcher = <ResponseType = Record<string, unknown>>(
 ) => Promise<ResponseType>;
 
 const jsonFetcher: JsonFetcher = async (input, init) => {
-  const response = await fetch(input, init);
-  const jsonRsp = await response.json();
-  if (!response.ok) {
-    return;
+  try {
+    const response = await fetch(input, init);
+    const jsonRsp = await response.json();
+    if (!response.ok) {
+      return;
+    }
+    return jsonRsp;
+  } catch (error) {
+    console.error(error);
   }
-  return jsonRsp;
 };
 
 export default jsonFetcher;

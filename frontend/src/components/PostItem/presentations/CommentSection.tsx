@@ -1,55 +1,73 @@
 import type { KeyboardEventHandler } from 'react';
-import { useRef, useState } from 'react';
+import { forwardRef, useState } from 'react';
 
-import { Box, Textarea } from '@chakra-ui/react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
-import { PostItem } from '../models/types';
+import { Box, Text, Textarea } from '@chakra-ui/react';
 
-const CommentSection = ({ data }: PostItem) => {
-  const [rows, setRows] = useState(1);
+import CommentItem from '@/components/CommentItem';
+import useComment from '@/usecase/useComment';
 
-  const inpRef = useRef<HTMLTextAreaElement>(null);
+import type { PostItemProps } from '../models/types';
 
-  const handleSubmit = (commentValue: string) => {
-    fetch(`/api/v1/comment/${data.id}`, {
-      body: JSON.stringify({ comment: commentValue }),
-      method: 'POST',
-      headers: {
-        'Content-Type': 'Application/Json',
-      },
-    });
-  };
+const CommentSection = forwardRef<HTMLTextAreaElement | null, PostItemProps>(({ data }, inputRef) => {
+  const { loading, showedComment, submitComment } = useComment({ data });
+
+  const pathname = usePathname();
+  const [value, setValue] = useState('');
+
+  const { comment_count } = data;
 
   const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
-    const isEnter = e.key === 'Enter';
-
-    if (isEnter && !e.shiftKey) {
+    if (e.key === 'Enter' && !e.shiftKey) {
       e.stopPropagation();
       e.preventDefault();
-      handleSubmit(e.currentTarget.value);
-      return;
-    }
-    if (isEnter && e.shiftKey) {
-      setRows((prev) => prev + 1);
+      submitComment(e.currentTarget.value);
+      setValue('');
     }
   };
 
   return (
-    <Box borderBottom="1px solid #ebebeb" marginTop={4}>
-      <Textarea
-        placeholder="Add a comment..."
-        ref={inpRef}
-        resize="none"
-        border="none"
-        _focus={{
-          outline: 'none',
-          borderColor: 'transparent',
-        }}
-        onKeyDown={handleKeyDown}
-        rows={rows}
-      />
-    </Box>
+    <>
+      {showedComment?.length && showedComment.map((data) => <CommentItem data={data} key={data.id} />)}
+      <Box borderBottom="1px solid #ebebeb" marginTop={4}>
+        {Boolean(comment_count) && (
+          <Box marginBottom={2}>
+            <Text as={Link} href={`${pathname}?p=${data.id}`} fontSize="small">
+              View all {comment_count} comments
+            </Text>
+          </Box>
+        )}
+
+        <Textarea
+          disabled={loading}
+          rows={1}
+          placeholder="Add a comment..."
+          value={value}
+          onChange={(e) => setValue(e.currentTarget.value)}
+          ref={inputRef}
+          resize="none"
+          border="none"
+          borderRadius={0}
+          _focus={{
+            outline: 'none',
+            borderColor: 'transparent',
+          }}
+          onKeyDown={handleKeyDown}
+        />
+      </Box>
+      <div style={{ textAlign: 'right' }}>
+        {Boolean(value.length) && (
+          <Box disabled={loading} textAlign="right" fontSize="small" color="blue" as="button">
+            Send
+          </Box>
+        )}
+      </div>
+    </>
   );
-};
+});
+
+CommentSection.displayName = 'CommentSection';
 
 export default CommentSection;

@@ -2,7 +2,7 @@ import { postRepo } from '@/modules/post/entities/post.entity';
 import BadRequest from '@/utils/errors/BadRequest';
 import NotFound from '@/utils/errors/NotFound';
 
-import { commentRep } from '../entities/comment.entity';
+import { commentRepo } from '../entities/comment.entity';
 import { CreateCommentRequest } from '../models/dto';
 
 const handleCreateComment = async (req: CreateCommentRequest) => {
@@ -17,7 +17,7 @@ const handleCreateComment = async (req: CreateCommentRequest) => {
   }
   const author = req.user;
 
-  await commentRep().save({
+  const created = await commentRepo().save({
     post_id: postID,
     author_id: author.id,
     comment: req.body.comment,
@@ -27,7 +27,11 @@ const handleCreateComment = async (req: CreateCommentRequest) => {
 
   await postRepo().save(foundPost);
 
-  return 'Comment Success!';
+  return {
+    ...created,
+    author_name: req.user.full_name,
+    synced: true,
+  };
 };
 
 export default handleCreateComment;
