@@ -23,6 +23,7 @@ const useComment = ({ data }: PostItemProps) => {
       ...(prev || []),
       {
         author_name: userData?.full_name,
+        author_image: userData?.avatar,
         comment: commentValue,
         created_at: dayjs().toISOString(),
         // temp ID

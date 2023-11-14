@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 
-import { DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USER } from '@/models/constants/env';
+import { DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USER } from '@/models/env/constants';
 import { Comment } from '@/modules/comment/entities/comment.entity';
 import { PostUserLike } from '@/modules/post/entities/post-like.entity';
 import { Post } from '@/modules/post/entities/post.entity';

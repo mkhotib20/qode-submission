@@ -32,16 +32,7 @@ const CommentSection = forwardRef<HTMLTextAreaElement | null, PostDetailProps>((
       <Box flex={1} textAlign="left" maxH={{ base: 600, md: 400 }} overflowY="auto">
         {showedComment?.length && showedComment.map((data) => <CommentItem data={data} key={data.id} />)}
         {postComment.result.map((item) => (
-          <CommentItem
-            key={item.id}
-            data={{
-              id: item.id,
-              author_name: item.author_name,
-              comment: item.comment,
-              created_at: item.created_at,
-              synced: true,
-            }}
-          />
+          <CommentItem key={item.id} data={{ ...item, synced: true }} />
         ))}
         {/* fetch more comments */}
         {Boolean(postComment.nextPage) && (

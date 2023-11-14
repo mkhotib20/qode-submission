@@ -48,7 +48,7 @@ const UploadWizard = ({ isOpen, onClose }: UploadWizardProps) => {
   };
 
   return (
-    <SimpleModal title={EACH_STEP_TITLE[activeStep]} isOpen={isOpen} onClose={onClose} size="xl">
+    <SimpleModal isCentered title={EACH_STEP_TITLE[activeStep]} isOpen={isOpen} onClose={onClose} size="xl">
       <Flex flexDir="column" minH={400} justifyContent="center" alignItems="center">
         {CurrentStep && (
           <CurrentStep

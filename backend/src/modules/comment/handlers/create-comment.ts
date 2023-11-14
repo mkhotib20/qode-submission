@@ -30,6 +30,7 @@ const handleCreateComment = async (req: CreateCommentRequest) => {
   return {
     ...created,
     author_name: req.user.full_name,
+    author_image: req.user.avatar,
     synced: true,
   };
 };

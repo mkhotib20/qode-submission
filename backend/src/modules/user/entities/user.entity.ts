@@ -1,5 +1,7 @@
 import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
+import { AppDataSource } from '@/config/db';
+
 @Entity({ name: 'user' })
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -18,3 +20,5 @@ export class User {
   @CreateDateColumn({ type: 'timestamptz' })
   created_at: string;
 }
+
+export const userRepo = () => AppDataSource.getRepository(User);

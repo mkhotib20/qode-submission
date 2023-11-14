@@ -8,6 +8,7 @@ export type ComponentProps<PropTypes = unknown> = PropsWithChildren<PropTypes>;
 export interface Comment {
   id: string;
   author_name: string;
+  author_image: string;
   comment: string;
   created_at: string;
   synced?: boolean;

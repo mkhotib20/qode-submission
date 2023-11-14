@@ -4,25 +4,17 @@ import { useCallback, useState } from 'react';
 
 import useSWRInfinite from 'swr/infinite';
 
-import { API_URL } from '@/models/constants';
 import jsonFetcher from '@/utils/jsonFetcher';
 
 import { PostResponse } from '../../models/types';
-
-const getKey = (pageIndex: number, prevPage?: PostResponse) => {
-  if (prevPage && !prevPage.result.length) {
-    return null;
-  }
-
-  return `${API_URL}/post?page=${pageIndex + 1}`;
-};
+import getHomepageKey from '../../utils/getHomepageKey';
 
 const useHomeData = () => {
   const [fetchingMore, setFetchingMore] = useState(false);
 
   // will always revalidate first page to reconsile the sort
   // In network will always show page 1 refetched before next page
-  const { data, setSize, isLoading } = useSWRInfinite<PostResponse>(getKey, jsonFetcher, {
+  const { data, setSize, isLoading } = useSWRInfinite<PostResponse>(getHomepageKey, jsonFetcher, {
     onSuccess: () => {
       setFetchingMore(false);
     },

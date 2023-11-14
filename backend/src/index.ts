@@ -1,17 +1,34 @@
 import Fastify from 'fastify';
 
+import fastifyCookie from '@fastify/cookie';
 import fastifyMultipart from '@fastify/multipart';
 import fastifyStatic from '@fastify/static';
 import { config } from 'dotenv';
+import { existsSync } from 'fs';
+import openssl from 'openssl-nodejs';
 import path from 'path';
 
 import initializeRouters from './initializeRouters';
 
 config();
 
-const main = () => {
+const main = async () => {
+  await new Promise((resolve) => {
+    if (!existsSync('openssl/publickey.pem')) {
+      openssl(['openssl', 'genrsa', '-out', 'privatekey.pem', '2048'], function () {
+        openssl(['openssl', 'rsa', '-in', 'privatekey.pem', '-out', 'publickey.pem', '-pubout'], function (err, buf) {
+          console.log(err.toString(), buf.toString());
+          resolve(true);
+        });
+      });
+    } else {
+      resolve(true);
+    }
+  });
+
   const app = Fastify();
   app.register(fastifyMultipart);
+  app.register(fastifyCookie);
 
   app.register(fastifyStatic, {
     root: path.join(process.cwd(), 'storage'),

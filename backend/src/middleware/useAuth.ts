@@ -3,6 +3,7 @@ import { FastifyRequest } from 'fastify';
 import { AppDataSource } from '@/config/db';
 import { User } from '@/modules/user/entities/user.entity';
 import Unauthorized from '@/utils/errors/Unauthorized';
+import getSubFromReq from '@/utils/getSubFromReq';
 
 declare module 'fastify' {
   interface FastifyRequest {
@@ -11,9 +12,7 @@ declare module 'fastify' {
 }
 
 const useAuth = async (req: FastifyRequest) => {
-  // @todo with jwt
-  // const sub = 'c8ae8079-9ce2-4971-8c95-d7be00060e0c';
-  const sub = '';
+  const sub = await getSubFromReq(req);
 
   if (!sub) {
     throw new Unauthorized('Bad credentials');
@@ -23,6 +22,7 @@ const useAuth = async (req: FastifyRequest) => {
   if (!foundUser) {
     throw new Unauthorized('Bad credentials');
   }
+
   req.user = foundUser;
 };
 

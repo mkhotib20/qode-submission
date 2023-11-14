@@ -6,6 +6,7 @@ import Image from 'next/image';
 
 import { Alert, AlertIcon, Button, Text } from '@chakra-ui/react';
 
+import LoginForm from '@/components/LoginForm/Lazy';
 import useAuth from '@/context/auth/hooks/useAuth';
 
 import { ComponentStepProps } from '../models/type';
@@ -45,12 +46,7 @@ const UploadStep = ({ setActiveStep, setImageState }: ComponentStepProps) => {
   };
 
   if (!isLoggedIn) {
-    return (
-      <>
-        <Text>To upload image, please login first</Text>
-        <Button>Login with google</Button>
-      </>
-    );
+    return <LoginForm />;
   }
 
   return (

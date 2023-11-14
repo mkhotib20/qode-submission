@@ -34,8 +34,6 @@ const handleGetDetail = async (req: FastifyRequest<{ Params: { id: string } }>) 
 
   const foundPost = await queryBuilder.getRawOne();
 
-  console.log(foundPost);
-
   if (!foundPost) {
     throw new NotFound('No post found');
   }
