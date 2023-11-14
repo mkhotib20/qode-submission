@@ -20,7 +20,7 @@ const Index = () => {
   return (
     <Flex height="100%">
       <Sidebar />
-      <Box margin="auto" maxW="100%" w="500px" padding="20px">
+      <Box margin="auto" maxW="100%" w="500px" padding="20px" paddingBottom="100px">
         {!postData.length && !isLoading && <Text>Empty</Text>}
         {isLoading && <ImageItemLoading />}
         {postData.map((photo) => (
