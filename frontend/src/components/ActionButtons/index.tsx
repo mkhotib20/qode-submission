@@ -23,7 +23,9 @@ const ActionButtons = forwardRef<HTMLTextAreaElement, ActionButtonsProps>((props
   const LikeIcon = useMemo(() => (isLiked ? AiFillLike : AiOutlineLike), [isLiked]);
 
   const handleComment = () => {
+    // @ts-expect-error somehow forwarded ref has no current property
     if (!inputRef?.current) return;
+    // @ts-expect-error somehow forwarded ref has no current property
     inputRef.current.focus();
   };
 
