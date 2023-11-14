@@ -27,7 +27,8 @@ const CommentItem = ({ data }: CommentItemProps) => {
             alignItems="center"
             gap="4px"
           >
-            <strong>{author_name}</strong> {content}
+            <strong>{author_name}</strong> <br />
+            {content}
           </Box>
           <Text fontSize="12">{dayjs(created_at).fromNow()}</Text>
         </Box>

@@ -3,7 +3,7 @@ import { AiOutlineCloudUpload, AiOutlineHome, AiOutlineLogin, AiOutlineLogout } 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { Flex, FlexProps, Text } from '@chakra-ui/react';
+import { Flex, FlexProps, Skeleton, Text } from '@chakra-ui/react';
 
 import useAuth from '@/context/auth/hooks/useAuth';
 import { API_URL } from '@/models/constants';
@@ -23,7 +23,7 @@ const ACTION_ITEM_PROPS: FlexProps = {
 const Sidebar = () => {
   const pathname = usePathname();
 
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, authLoading } = useAuth();
 
   const handleLogout = () => {
     fetch(`${API_URL}/auth/logout`).then(() => {
@@ -62,16 +62,17 @@ const Sidebar = () => {
         <Flex {...ACTION_ITEM_PROPS} as={Link} href={`${pathname}?l=${isLoggedIn ? 'upload' : 'login'}`}>
           <AiOutlineCloudUpload size={24} /> <Text display={{ base: 'none', lg: 'block' }}>Upload</Text>
         </Flex>
-        {isLoggedIn && (
+        {!authLoading && isLoggedIn && (
           <Flex {...ACTION_ITEM_PROPS} onClick={handleLogout}>
             <AiOutlineLogout size={24} /> <Text display={{ base: 'none', lg: 'block' }}>Logout</Text>
           </Flex>
         )}
-        {!isLoggedIn && (
+        {!authLoading && !isLoggedIn && (
           <Flex {...ACTION_ITEM_PROPS} as={Link} href={`${pathname}?l=login`}>
             <AiOutlineLogin size={24} /> <Text display={{ base: 'none', lg: 'block' }}>Login</Text>
           </Flex>
         )}
+        {authLoading && <Flex {...ACTION_ITEM_PROPS} as={Skeleton} />}
       </Flex>
     </>
   );

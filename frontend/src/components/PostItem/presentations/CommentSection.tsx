@@ -1,4 +1,3 @@
-import type { KeyboardEventHandler } from 'react';
 import { forwardRef, useState } from 'react';
 
 import Link from 'next/link';
@@ -21,15 +20,10 @@ const CommentSection = forwardRef<HTMLTextAreaElement | null, PostItemProps>(({ 
 
   const { comment_count } = data;
 
-  const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.stopPropagation();
-      e.preventDefault();
-      submitComment(e.currentTarget.value);
-      setValue('');
-    }
+  const handleSubmit = () => {
+    setValue('');
+    submitComment(value);
   };
-
   return (
     <>
       {showedComment?.length && showedComment.map((data) => <CommentItem data={data} key={data.id} />)}
@@ -56,12 +50,11 @@ const CommentSection = forwardRef<HTMLTextAreaElement | null, PostItemProps>(({ 
             outline: 'none',
             borderColor: 'transparent',
           }}
-          onKeyDown={handleKeyDown}
         />
       </Box>
       <div style={{ textAlign: 'right' }}>
         {Boolean(value.length) && (
-          <Box disabled={loading} textAlign="right" fontSize="small" color="blue" as="button">
+          <Box onClick={handleSubmit} disabled={loading} textAlign="right" fontSize="small" color="blue" as="button">
             Send
           </Box>
         )}
