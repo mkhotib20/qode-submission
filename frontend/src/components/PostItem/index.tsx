@@ -2,7 +2,7 @@ import { useRef } from 'react';
 
 import Image from 'next/image';
 
-import { Box } from '@chakra-ui/react';
+import { Box, Divider } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
@@ -34,6 +34,7 @@ const PostItem = ({ data }: PostItemProps) => {
         ref={inputRef}
       />
       <ImageDescription data={data} />
+      <Divider margin="20px 0" />
       <CommentSection ref={inputRef} data={data} />
     </Box>
   );

@@ -6,12 +6,14 @@ import { FiMessageCircle } from 'react-icons/fi';
 
 import { Button, Flex, Text } from '@chakra-ui/react';
 
+import useAuth from '@/context/auth/hooks/useAuth';
 import { API_URL } from '@/models/constants';
 
 import { ActionButtonsProps } from './models/types';
 
 const ActionButtons = forwardRef<HTMLTextAreaElement, ActionButtonsProps>((props, inputRef) => {
   const [isLiked, setIsLiked] = useState(props.isLiked);
+  const { isLoggedIn } = useAuth();
   const { likeCount, commentCount } = props;
   const [localLikeCount, setLocalLikeCount] = useState(likeCount);
   const LikeIcon = useMemo(() => (isLiked ? AiFillLike : AiOutlineLike), [isLiked]);
@@ -22,6 +24,10 @@ const ActionButtons = forwardRef<HTMLTextAreaElement, ActionButtonsProps>((props
   };
 
   const toggleLike = () => {
+    if (!isLoggedIn) {
+      alert('login ?');
+      return;
+    }
     setIsLiked((prev) => !prev);
     fetch(`${API_URL}/post/like/${props.postID}`, {
       method: 'POST',

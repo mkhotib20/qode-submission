@@ -28,7 +28,7 @@ const useHomeData = () => {
     },
   });
 
-  const postData = data?.flatMap((item) => item.result) || [];
+  const postData = data?.flatMap((item) => item?.result) || [];
   const hasNext = data?.[data?.length - 1]?.nextPage;
 
   const fetchMore = useCallback(() => {

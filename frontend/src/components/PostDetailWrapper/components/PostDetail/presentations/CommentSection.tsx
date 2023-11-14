@@ -2,15 +2,17 @@ import type { KeyboardEventHandler } from 'react';
 import { forwardRef, useState } from 'react';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 
-import { Box, Button, Textarea } from '@chakra-ui/react';
+import { Box, Button, Flex, Textarea } from '@chakra-ui/react';
 
 import CommentItem from '@/components/CommentItem';
+import useAuth from '@/context/auth/hooks/useAuth';
 import useComment from '@/usecase/useComment';
 
 import { PostDetailProps } from '../models/types';
 
 const CommentSection = forwardRef<HTMLTextAreaElement | null, PostDetailProps>((props, inpRef) => {
   const { postData, postComment, onFetchMore } = props;
+  const { isLoggedIn } = useAuth();
 
   const { loading, showedComment, submitComment } = useComment({ data: postData });
 
@@ -26,8 +28,8 @@ const CommentSection = forwardRef<HTMLTextAreaElement | null, PostDetailProps>((
   };
 
   return (
-    <>
-      <Box textAlign="left" maxH={{ base: 600, md: 400 }} overflowY="auto">
+    <Flex height="80vh" flexDir="column">
+      <Box flex={1} textAlign="left" maxH={{ base: 600, md: 400 }} overflowY="auto">
         {showedComment?.length && showedComment.map((data) => <CommentItem data={data} key={data.id} />)}
         {postComment.result.map((item) => (
           <CommentItem
@@ -52,9 +54,9 @@ const CommentSection = forwardRef<HTMLTextAreaElement | null, PostDetailProps>((
       </Box>
       <Box borderBottom="1px solid #ebebeb" marginTop={4}>
         <Textarea
-          disabled={loading}
+          disabled={!isLoggedIn || loading}
           rows={1}
-          placeholder="Add a comment..."
+          placeholder={isLoggedIn ? 'Add a comment...' : 'Login to comment'}
           value={value}
           onChange={(e) => setValue(e.currentTarget.value)}
           ref={inpRef}
@@ -75,7 +77,7 @@ const CommentSection = forwardRef<HTMLTextAreaElement | null, PostDetailProps>((
           </Box>
         )}
       </div>
-    </>
+    </Flex>
   );
 });
 

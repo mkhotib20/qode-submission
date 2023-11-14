@@ -12,7 +12,12 @@ declare module 'fastify' {
 
 const useAuth = async (req: FastifyRequest) => {
   // @todo with jwt
-  const sub = 'c8ae8079-9ce2-4971-8c95-d7be00060e0c';
+  // const sub = 'c8ae8079-9ce2-4971-8c95-d7be00060e0c';
+  const sub = '';
+
+  if (!sub) {
+    throw new Unauthorized('Bad credentials');
+  }
   const foundUser = await AppDataSource.getRepository(User).findOne({ where: { id: sub } });
 
   if (!foundUser) {

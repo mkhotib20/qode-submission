@@ -4,6 +4,8 @@ import { PropsWithChildren } from 'react';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
+import { Box } from '@chakra-ui/react';
+
 import useSwrFetch from '@/hooks/useSwrFetch';
 import { API_URL } from '@/models/constants';
 import { PostData } from '@/models/types';
@@ -26,16 +28,18 @@ const PostDetailWrapper = ({ children }: PropsWithChildren<unknown>) => {
     <>
       {children}
       <SimpleModal isCentered onClose={() => push(pathname)} size="6xl" isOpen={Boolean(postID)}>
-        {postData && (
-          <PostDetail
-            postData={postData}
-            onFetchMore={handleFetchMore}
-            postComment={{
-              nextPage: dataComment?.nextPage,
-              result: dataComment?.result || [],
-            }}
-          />
-        )}
+        <Box minH="80vh">
+          {postData && (
+            <PostDetail
+              postData={postData}
+              onFetchMore={handleFetchMore}
+              postComment={{
+                nextPage: dataComment?.nextPage,
+                result: dataComment?.result || [],
+              }}
+            />
+          )}
+        </Box>
       </SimpleModal>
     </>
   );

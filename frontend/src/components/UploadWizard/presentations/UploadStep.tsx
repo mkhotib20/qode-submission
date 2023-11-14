@@ -6,12 +6,15 @@ import Image from 'next/image';
 
 import { Alert, AlertIcon, Button, Text } from '@chakra-ui/react';
 
+import useAuth from '@/context/auth/hooks/useAuth';
+
 import { ComponentStepProps } from '../models/type';
 
 const ALLOWED_IMAGE = ['image/png', 'image/jpeg', 'image/gif'];
 
 const UploadStep = ({ setActiveStep, setImageState }: ComponentStepProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const { isLoggedIn } = useAuth();
 
   const [error, setError] = useState('');
 
@@ -40,6 +43,15 @@ const UploadStep = ({ setActiveStep, setImageState }: ComponentStepProps) => {
     setActiveStep('caption');
     event.currentTarget.value = '';
   };
+
+  if (!isLoggedIn) {
+    return (
+      <>
+        <Text>To upload image, please login first</Text>
+        <Button>Login with google</Button>
+      </>
+    );
+  }
 
   return (
     <>

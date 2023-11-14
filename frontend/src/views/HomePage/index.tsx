@@ -24,7 +24,7 @@ const Index = () => {
         {!postData.length && !isLoading && <Text>Empty</Text>}
         {isLoading && <ImageItemLoading />}
         {postData.map((photo) => (
-          <PostItem data={photo} key={photo.id} />
+          <PostItem data={photo} key={photo?.id} />
         ))}
 
         {hasNext && !isLoading && (

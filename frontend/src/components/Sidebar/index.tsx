@@ -1,4 +1,4 @@
-import { AiOutlineHome, AiOutlinePlusCircle, AiOutlineSearch } from 'react-icons/ai';
+import { AiOutlineCloudUpload, AiOutlineHome, AiOutlineSearch } from 'react-icons/ai';
 
 import Link from 'next/link';
 
@@ -52,7 +52,7 @@ const Sidebar = () => {
           <Text display={{ base: 'none', lg: 'block' }}>Search</Text>
         </Flex>
         <Flex {...ACTION_ITEM_PROPS} onClick={() => onOpen()}>
-          <AiOutlinePlusCircle size={24} /> <Text display={{ base: 'none', lg: 'block' }}>Create</Text>
+          <AiOutlineCloudUpload size={24} /> <Text display={{ base: 'none', lg: 'block' }}>Upload</Text>
         </Flex>
       </Flex>
       <UploadWizard isOpen={isOpen} onClose={onClose} />

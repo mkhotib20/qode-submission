@@ -7,12 +7,14 @@ import { usePathname } from 'next/navigation';
 import { Box, Text, Textarea } from '@chakra-ui/react';
 
 import CommentItem from '@/components/CommentItem';
+import useAuth from '@/context/auth/hooks/useAuth';
 import useComment from '@/usecase/useComment';
 
 import type { PostItemProps } from '../models/types';
 
 const CommentSection = forwardRef<HTMLTextAreaElement | null, PostItemProps>(({ data }, inputRef) => {
   const { loading, showedComment, submitComment } = useComment({ data });
+  const { isLoggedIn } = useAuth();
 
   const pathname = usePathname();
   const [value, setValue] = useState('');
@@ -41,9 +43,9 @@ const CommentSection = forwardRef<HTMLTextAreaElement | null, PostItemProps>(({ 
         )}
 
         <Textarea
-          disabled={loading}
+          disabled={!isLoggedIn || loading}
           rows={1}
-          placeholder="Add a comment..."
+          placeholder={isLoggedIn ? 'Add a comment...' : 'Login to comment'}
           value={value}
           onChange={(e) => setValue(e.currentTarget.value)}
           ref={inputRef}
